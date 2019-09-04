@@ -202,14 +202,12 @@ export default function morphdomFactory(morphAttrs) {
 
             if (!childrenOnly) {
                 // optional
-                if (onBeforeElUpdated(fromEl, toEl) === false) {
-                    return;
+                if (onBeforeElUpdated(fromEl, toEl) !== false) {
+                    // update attributes on original DOM element first
+                    morphAttrs(fromEl, toEl);
+                    // optional
+                    onElUpdated(fromEl);
                 }
-
-                // update attributes on original DOM element first
-                morphAttrs(fromEl, toEl);
-                // optional
-                onElUpdated(fromEl);
 
                 if (onBeforeElChildrenUpdated(fromEl, toEl) === false) {
                     return;
