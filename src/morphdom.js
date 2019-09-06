@@ -36,6 +36,7 @@ export default function morphdomFactory(morphAttrs) {
         var onNodeAdded = options.onNodeAdded || noop;
         var onBeforeElUpdated = options.onBeforeElUpdated || noop;
         var onElUpdated = options.onElUpdated || noop;
+        var onBeforeAttrUpdated = options.onBeforeAttrUpdated || noop;
         var onBeforeNodeDiscarded = options.onBeforeNodeDiscarded || noop;
         var onNodeDiscarded = options.onNodeDiscarded || noop;
         var onBeforeElChildrenUpdated = options.onBeforeElChildrenUpdated || noop;
@@ -202,7 +203,11 @@ export default function morphdomFactory(morphAttrs) {
 
             if (!childrenOnly) {
                 // optional
-                if (onBeforeElUpdated(fromEl, toEl) !== false) {
+                //
+                if (onBeforeElUpdated(fromEl, toEl) === false) {
+                    return;
+                }
+                if (onBeforeAttrUpdated(fromEl, toEl) !== false) {
                     // update attributes on original DOM element first
                     morphAttrs(fromEl, toEl);
                     // optional
